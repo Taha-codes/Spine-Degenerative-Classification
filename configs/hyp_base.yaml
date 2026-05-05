@@ -1,0 +1,47 @@
+# Hyperparameters for full training on Kaggle GPU (T4/P100)
+# Model: yolo11n or yolo11m | Image size: 640x640
+
+# Training schedule
+epochs: 100
+patience: 20          # early stopping — stop if no val mAP50 improvement for 20 epochs
+warmup_epochs: 3
+warmup_momentum: 0.8
+warmup_bias_lr: 0.1
+
+# Optimiser
+optimizer: AdamW
+lr0: 0.001            # lower than YOLO default (0.01) — MRI is fine-grained, needs careful convergence
+lrf: 0.01
+momentum: 0.937
+weight_decay: 0.0005
+cos_lr: true          # cosine annealing over 100 epochs
+
+# Input
+imgsz: 640
+batch: 16             # safe for Kaggle T4 16GB with yolo11m; reduce to 8 for larger models
+
+# Augmentation — MRI-tuned: colour augments disabled, geometric only
+hsv_h: 0.0            # disabled — MRI is greyscale, hue shift meaningless
+hsv_s: 0.0            # disabled — greyscale images have no saturation
+hsv_v: 0.02           # tiny brightness variance to simulate scanner differences across 8 sites
+degrees: 10.0         # rotation ±10° — mild rotation common in scout positioning
+translate: 0.1
+scale: 0.1
+shear: 2.0
+perspective: 0.0      # disabled — distorts vertebral anatomy unrealistically
+flipud: 0.0           # disabled — breaks cranial/caudal anatomical ordering (critical)
+fliplr: 0.3           # enabled — bilateral conditions (L/R foraminal, L/R subarticular) are symmetric
+mosaic: 0.5           # half rate — full mosaic destroys vertebral level ordering
+mixup: 0.1
+copy_paste: 0.0       # disabled — copy-paste of vertebral segments not anatomically meaningful
+
+# Loss weights — favour classification over localisation for severity grading
+box: 5.0
+cls: 3.0              # raised from default 0.5 — severity class accuracy is the primary competition goal
+dfl: 1.5
+
+# Other
+cache: ram            # use full RAM — eliminates I/O bottleneck on Kaggle and M3 Max
+workers: 4
+seed: 42
+verbose: true

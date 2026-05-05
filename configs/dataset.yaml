@@ -1,0 +1,32 @@
+# RSNA 2024 Lumbar Spine Degenerative Classification — Dataset Config
+#
+# Class mapping convention: condition + severity (3 severity levels × 5 conditions = 15 classes)
+# Severity levels: normal_mild=0, moderate=1, severe=2
+# Conditions:
+#   spinal_canal_stenosis       (sagittal T2, classes 0-2)
+#   right_neural_foraminal_narrowing (sagittal T1, classes 3-5)
+#   left_neural_foraminal_narrowing  (sagittal T1, classes 6-8)
+#   right_subarticular_stenosis (axial T2, classes 9-11)
+#   left_subarticular_stenosis  (axial T2, classes 12-14)
+
+path: data/processed          # dataset root — relative to project root
+train: images/train
+val: images/val
+
+nc: 15
+names:
+  0: spinal_canal_stenosis_normal_mild
+  1: spinal_canal_stenosis_moderate
+  2: spinal_canal_stenosis_severe
+  3: right_neural_foraminal_narrowing_normal_mild
+  4: right_neural_foraminal_narrowing_moderate
+  5: right_neural_foraminal_narrowing_severe
+  6: left_neural_foraminal_narrowing_normal_mild
+  7: left_neural_foraminal_narrowing_moderate
+  8: left_neural_foraminal_narrowing_severe
+  9: right_subarticular_stenosis_normal_mild
+  10: right_subarticular_stenosis_moderate
+  11: right_subarticular_stenosis_severe
+  12: left_subarticular_stenosis_normal_mild
+  13: left_subarticular_stenosis_moderate
+  14: left_subarticular_stenosis_severe

@@ -1,0 +1,39 @@
+# DO NOT USE FOR REAL TRAINING — smoke test only
+# 3-epoch local MPS run (M3 Max MacBook Pro) to verify pipeline before Kaggle submission
+# All augmentation disabled for speed. batch=8 for MPS memory safety.
+
+epochs: 3
+patience: 3
+warmup_epochs: 0      # skip warmup — no value in 3-epoch test
+
+optimizer: AdamW
+lr0: 0.001
+cos_lr: false         # not needed for 3 epochs — scheduler has no time to anneal
+
+imgsz: 640
+batch: 8              # conservative for MPS unified memory (avoids OOM)
+
+# Augmentation — all disabled for maximum speed and reproducibility
+hsv_h: 0.0
+hsv_s: 0.0
+hsv_v: 0.0
+degrees: 0.0
+translate: 0.0
+scale: 0.0
+shear: 0.0
+perspective: 0.0
+flipud: 0.0
+fliplr: 0.0
+mosaic: 0.0           # disabled — slow on MPS, not needed for pipeline verification
+mixup: 0.0
+copy_paste: 0.0
+
+box: 5.0
+cls: 3.0
+dfl: 1.5
+
+cache: false          # disable on MPS — unified memory is managed by macOS, cache causes double alloc
+amp: false            # disable AMP — FP16 gives no benefit on MPS and can cause NaN losses
+workers: 2            # MPS benefits less from high worker count than CUDA
+seed: 42
+verbose: true
